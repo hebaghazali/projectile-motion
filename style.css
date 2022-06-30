@@ -9,7 +9,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .container {
@@ -17,6 +17,7 @@ body {
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  max-width: 95%;
 }
 
 .inputs-container {
@@ -33,8 +34,12 @@ body {
 }
 
 .inputs-container input {
-  width: 6rem;
+  width: 3.5rem;
   margin-right: 10px;
+  padding: 4px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+  text-align: center;
 }
 
 .inputs-container .buttons button {
@@ -56,14 +61,20 @@ body {
   box-shadow: 0 0 0 0 #d4d4d4;
 }
 
-#launch {
+.inputs-container .buttons #launch {
   border: none;
   color: #fff;
   background-color: #2a8fb0;
 }
 
-#launch:active {
+.inputs-container .buttons #launch:active {
   background-color: #2b8fb1e6;
+}
+
+.inputs-container .buttons #launch:disabled {
+  background-color: #2b8fb080;
+  cursor: default;
+  box-shadow: 0 0 4px 1px #d4d4d4;
 }
 
 .box {
@@ -74,6 +85,8 @@ body {
   box-shadow: 0 0 8px 5px #d4d4d4;
   border-radius: 1rem;
   overflow: hidden;
+  max-width: 100%;
+  z-index: -1;
 }
 
 .grass {
@@ -82,26 +95,6 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3.5rem;
-}
-
-.ball {
-  position: absolute;
-  left: 2.3rem;
-  bottom: 2.3rem;
-  z-index: 1;
-
-  display: block;
-  width: 2.3rem;
-  height: 2.3rem;
-  margin: 50px auto 0;
-  border-radius: 50%;
-
-  background-color: rgb(231, 49, 70);
-  box-shadow: inset -25px -15px 10px rgba(0, 0, 0, 0.3);
-  background-image: linear-gradient(
-    -45deg,
-    rgba(255, 255, 220, 0.3) 0%,
-    transparent 100%
-  );
+  height: 3rem;
+  z-index: -1;
 }

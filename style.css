@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.inputs-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.inputs-container .inputs {
+  display: inline;
+  font-weight: bold;
+}
+
+.inputs-container input {
+  width: 6rem;
+  margin-right: 10px;
+}
+
+.inputs-container .buttons button {
+  width: 10rem;
+  height: 2rem;
+  border-radius: 5px;
+  border: 2px solid #2a8fb0;
+  color: #2a8fb0;
+  background-color: #f9f9f9;
+  outline: none;
+  box-shadow: 0 0 4px 1px #d4d4d4;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.inputs-container .buttons button:active {
+  border: 2px solid #2b8fb1e6;
+  color: #2b8fb1e6;
+  box-shadow: 0 0 0 0 #d4d4d4;
+}
+
+#launch {
+  border: none;
+  color: #fff;
+  background-color: #2a8fb0;
+}
+
+#launch:active {
+  background-color: #2b8fb1e6;
+}
+
+.box {
+  position: relative;
+  width: 50rem;
+  height: 30rem;
+  background-color: #add8e6;
+  box-shadow: 0 0 8px 5px #d4d4d4;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.grass {
+  background-color: #27b727;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+}
+
+.ball {
+  position: absolute;
+  left: 2.3rem;
+  bottom: 2.3rem;
+  z-index: 1;
+
+  display: block;
+  width: 2.3rem;
+  height: 2.3rem;
+  margin: 50px auto 0;
+  border-radius: 50%;
+
+  background-color: rgb(231, 49, 70);
+  box-shadow: inset -25px -15px 10px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 220, 0.3) 0%,
+    transparent 100%
+  );
+}

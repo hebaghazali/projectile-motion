@@ -42,6 +42,12 @@ body {
   text-align: center;
 }
 
+.inputs-container .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+}
+
 .inputs-container .buttons button {
   width: 10rem;
   height: 2rem;

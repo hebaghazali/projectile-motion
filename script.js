@@ -51,6 +51,7 @@ function animationLoop() {
       // Move the object to its initial Y value if it doesn't touch the final X value
       Y += deltaY;
       draw();
+      updateDistanceText();
     }
   }
 }
@@ -108,7 +109,7 @@ function launch() {
   if (objectIsMoving(X, Y)) return;
 
   velocity = Number(velocityInput.value) || 70;
-  angle = Number(angleInput.value) || 70;
+  angle = Number(angleInput.value) || 60;
   reset();
   init();
 }

@@ -19,8 +19,8 @@ let Y = Y0;
 let T = 0;
 let deltaX = 0;
 let deltaY = 0;
-let velocity = Number(velocityInput.value) || 70;
-let angle = Number(angleInput.value) || 70;
+let velocity = Number(velocityInput.value) || 0;
+let angle = Number(angleInput.value) || 0;
 const radius = 15;
 const g = 9.8;
 
@@ -87,6 +87,10 @@ function reset(e) {
 
   if (e && e.target.id === 'reset') {
     launchBtn.removeAttribute('disabled');
+
+    velocityInput.value = '';
+    angleInput.value = '';
+
     X0 = 30;
   } else {
     X0 = X;
@@ -108,8 +112,8 @@ function launch() {
 
   if (objectIsMoving(X, Y)) return;
 
-  velocity = Number(velocityInput.value) || 70;
-  angle = Number(angleInput.value) || 60;
+  velocity = Number(velocityInput.value) || 0;
+  angle = Number(angleInput.value) || 0;
   reset();
   init();
 }

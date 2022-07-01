@@ -19,8 +19,8 @@ let Y = Y0;
 let T = 0;
 let deltaX = 0;
 let deltaY = 0;
-let velocity = Number(velocityInput.value) || 0;
-let angle = Number(angleInput.value) || 0;
+let velocity = Number(velocityInput.value) || 70;
+let angle = Number(angleInput.value) || 70;
 const radius = 15;
 const g = 9.8;
 
@@ -29,6 +29,10 @@ let v0Y = velocity * Math.sin((angle * Math.PI) / 180);
 
 // draw the object on load
 draw();
+
+// display the distance on the screen
+const distance = document.getElementById('distance');
+updateDistanceText();
 
 function init() {
   window.requestAnimationFrame(animationLoop);
@@ -58,6 +62,8 @@ function update() {
   deltaY = v0Y * T - 0.5 * g * Math.pow(T, 2);
   X = X0 + deltaX;
   Y = Y0 - deltaY;
+
+  updateDistanceText();
 }
 
 function draw() {
@@ -66,6 +72,13 @@ function draw() {
   ctx.arc(X, Y, radius, 0, 2 * Math.PI);
   ctx.fillStyle = '#e73146';
   ctx.fill();
+}
+
+function updateDistanceText() {
+  distance.innerHTML = `
+    <p style="font-weight: bold">x: ${X}</p>
+    <p style="font-weight: bold">y: ${Y}</p>
+  `;
 }
 
 function reset(e) {
@@ -86,6 +99,7 @@ function reset(e) {
   v0Y = velocity * Math.sin((angle * Math.PI) / 180);
 
   draw();
+  updateDistanceText();
 }
 
 function launch() {
@@ -93,8 +107,8 @@ function launch() {
 
   if (objectIsMoving(X, Y)) return;
 
-  velocity = Number(velocityInput.value) || 0;
-  angle = Number(angleInput.value) || 0;
+  velocity = Number(velocityInput.value) || 70;
+  angle = Number(angleInput.value) || 70;
   reset();
   init();
 }

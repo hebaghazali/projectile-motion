@@ -66,19 +66,19 @@ function update() {
   updateDistanceText();
 }
 
+function updateDistanceText() {
+  distance.innerHTML = `
+    <p style="font-weight: bold">x: ${X.toFixed(2)}</p>
+    <p style="font-weight: bold">y: ${Y.toFixed(2)}</p>
+  `;
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
   ctx.arc(X, Y, radius, 0, 2 * Math.PI);
   ctx.fillStyle = '#e73146';
   ctx.fill();
-}
-
-function updateDistanceText() {
-  distance.innerHTML = `
-    <p style="font-weight: bold">x: ${X}</p>
-    <p style="font-weight: bold">y: ${Y}</p>
-  `;
 }
 
 function reset(e) {

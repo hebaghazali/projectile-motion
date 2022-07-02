@@ -34,8 +34,9 @@ draw();
 const distance = document.getElementById('distance');
 updateDistanceText();
 
+let requestAnimFrame;
 function init() {
-  window.requestAnimationFrame(animationLoop);
+  requestAnimFrame = window.requestAnimationFrame(animationLoop);
 }
 
 function animationLoop() {
@@ -43,21 +44,30 @@ function animationLoop() {
   draw();
 
   const xIsOnEdge = X >= canvas.width - radius || X <= radius;
+  const yIsOnEdge = Y >= canvas.height - groundHeight;
 
-  if (objectIsMoving(X, Y)) window.requestAnimationFrame(animationLoop);
-  else {
-    if (xIsOnEdge) launchBtn.setAttribute('disabled', true);
-    else {
-      // Move the object to its initial Y value if it doesn't touch the final X value
-      Y += deltaY;
-      draw();
-      updateDistanceText();
-    }
+  if (!xIsOnEdge) {
+    requestAnimFrame = window.requestAnimationFrame(animationLoop);
+  } else {
+    launchBtn.setAttribute('disabled', true);
+  }
+
+  if (yIsOnEdge && !xIsOnEdge) {
+    T = 0;
+    X0 = X;
+    Y0 = Y;
+    velocity *= 0.8;
+  }
+  if (Math.floor(velocity) === 0) {
+    window.cancelAnimationFrame(requestAnimFrame);
   }
 }
 
 function update() {
-  T += 0.16;
+  T += 0.15;
+
+  v0X = velocity * Math.cos((angle * Math.PI) / 180);
+  v0Y = velocity * Math.sin((angle * Math.PI) / 180);
 
   deltaX = v0X * T;
   deltaY = v0Y * T - 0.5 * g * Math.pow(T, 2);
@@ -69,8 +79,8 @@ function update() {
 
 function updateDistanceText() {
   distance.innerHTML = `
-    <p style="font-weight: bold">x: ${X.toFixed(2)}</p>
-    <p style="font-weight: bold">y: ${Y.toFixed(2)}</p>
+    <p><strong>X: </strong>${X.toFixed(2)}</p>
+    <p><strong>Y: </strong>${Y.toFixed(2)}</p>
   `;
 }
 
@@ -92,12 +102,13 @@ function reset(e) {
     angleInput.value = '';
 
     X0 = 30;
+    Y0 = canvas.height - groundHeight;
   } else {
     X0 = X;
   }
 
   X = X0;
-  Y = canvas.height - groundHeight;
+  Y = Y0;
   T = 0;
 
   v0X = velocity * Math.cos((angle * Math.PI) / 180);
@@ -108,8 +119,6 @@ function reset(e) {
 }
 
 function launch() {
-  console.log(Y);
-
   if (objectIsMoving(X, Y)) return;
 
   velocity = Number(velocityInput.value) || 0;
@@ -122,7 +131,7 @@ launchBtn.addEventListener('click', launch);
 resetBtn.addEventListener('click', reset);
 
 function objectIsMoving(x, y) {
-  const yIsOnEdge = y >= canvas.height - groundHeight;
+  const yIsOnEdge = y >= canvas.height - (groundHeight + 0.1);
   const xIsOnEdge = x >= canvas.width - radius || X <= radius;
 
   return !yIsOnEdge && !xIsOnEdge;

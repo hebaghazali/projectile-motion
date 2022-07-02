@@ -27,39 +27,54 @@ const g = 9.8;
 let v0X = velocity * Math.cos((angle * Math.PI) / 180);
 let v0Y = velocity * Math.sin((angle * Math.PI) / 180);
 
-// draw the object on load
+// draw the ball on load
 draw();
 
 // display the distance on the screen
 const distance = document.getElementById('distance');
 updateDistanceText();
 
-let requestAnimFrame;
+let requestID;
 function init() {
-  requestAnimFrame = window.requestAnimationFrame(animationLoop);
+  requestID = window.requestAnimationFrame(animationLoop);
 }
 
 function animationLoop() {
   update();
   draw();
 
-  const xIsOnEdge = X >= canvas.width - radius || X <= radius;
-  const yIsOnEdge = Y >= canvas.height - groundHeight;
+  const ballIsOnLeft = X <= radius;
+  const ballIsOnRight = X >= canvas.width - radius;
+  const ballIsOnBottom = Y >= canvas.height - groundHeight;
+  const ballIsOnTop = Y <= radius + 2;
 
-  if (!xIsOnEdge) {
-    requestAnimFrame = window.requestAnimationFrame(animationLoop);
+  if (!ballIsOnLeft && !ballIsOnRight) {
+    requestID = window.requestAnimationFrame(animationLoop);
+    if (ballIsOnTop) {
+      T = 0;
+      X0 = X;
+      Y0 = Y;
+
+      angle = -angle;
+      velocity *= 0.45;
+    } else if (ballIsOnBottom) {
+      T = 0;
+      X0 = X;
+      Y0 = Y;
+
+      if (angle < 0) {
+        angle = -angle;
+        velocity *= 1 / 0.45;
+      }
+
+      velocity *= 0.8;
+    }
   } else {
     launchBtn.setAttribute('disabled', true);
   }
 
-  if (yIsOnEdge && !xIsOnEdge) {
-    T = 0;
-    X0 = X;
-    Y0 = Y;
-    velocity *= 0.8;
-  }
   if (Math.floor(velocity) === 0) {
-    window.cancelAnimationFrame(requestAnimFrame);
+    window.cancelAnimationFrame(requestID);
   }
 }
 
@@ -93,7 +108,7 @@ function draw() {
 }
 
 function reset(e) {
-  if (objectIsMoving(X, Y)) return;
+  if (ballIsMoving(X, Y)) return;
 
   if (e && e.target.id === 'reset') {
     launchBtn.removeAttribute('disabled');
@@ -119,7 +134,7 @@ function reset(e) {
 }
 
 function launch() {
-  if (objectIsMoving(X, Y)) return;
+  if (ballIsMoving(X, Y)) return;
 
   velocity = Number(velocityInput.value) || 0;
   angle = Number(angleInput.value) || 0;
@@ -130,7 +145,7 @@ function launch() {
 launchBtn.addEventListener('click', launch);
 resetBtn.addEventListener('click', reset);
 
-function objectIsMoving(x, y) {
+function ballIsMoving(x, y) {
   const yIsOnEdge = y >= canvas.height - (groundHeight + 0.1);
   const xIsOnEdge = x >= canvas.width - radius || X <= radius;
 

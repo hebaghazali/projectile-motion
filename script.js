@@ -13,7 +13,7 @@ canvas.height = canvasBox.offsetHeight;
 const groundHeight = 50;
 
 let X0 = 30;
-let Y0 = canvas.height - groundHeight;
+let Y0 = canvas.height - (groundHeight + 2);
 let X = X0;
 let Y = Y0;
 let T = 0;
@@ -21,7 +21,7 @@ let deltaX = 0;
 let deltaY = 0;
 let velocity = Number(velocityInput.value) || 0;
 let angle = Number(angleInput.value) || 0;
-const radius = 15;
+const radius = 4;
 const g = 9.8;
 
 let v0X = velocity * Math.cos((angle * Math.PI) / 180);
@@ -45,41 +45,17 @@ function animationLoop() {
 
   const ballIsOnLeft = X <= radius;
   const ballIsOnRight = X >= canvas.width - radius;
-  const ballIsOnBottom = Y >= canvas.height - groundHeight;
-  const ballIsOnTop = Y <= radius + 2;
+  const ballIsOnBottom = Y >= canvas.height - (groundHeight + radius);
 
-  if (!ballIsOnLeft && !ballIsOnRight) {
+  if (!ballIsOnLeft && !ballIsOnRight && !ballIsOnBottom) {
     requestID = window.requestAnimationFrame(animationLoop);
-    if (ballIsOnTop) {
-      T = 0;
-      X0 = X;
-      Y0 = Y;
-
-      angle = -angle;
-      velocity *= 0.45;
-    } else if (ballIsOnBottom) {
-      T = 0;
-      X0 = X;
-      Y0 = Y;
-
-      if (angle < 0) {
-        angle = -angle;
-        velocity *= 1 / 0.45;
-      }
-
-      velocity *= 0.8;
-    }
   } else {
     launchBtn.setAttribute('disabled', true);
-  }
-
-  if (Math.floor(velocity) === 0) {
-    window.cancelAnimationFrame(requestID);
   }
 }
 
 function update() {
-  T += 0.15;
+  T += 0.18;
 
   v0X = velocity * Math.cos((angle * Math.PI) / 180);
   v0Y = velocity * Math.sin((angle * Math.PI) / 180);
@@ -100,7 +76,6 @@ function updateDistanceText() {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
   ctx.arc(X, Y, radius, 0, 2 * Math.PI);
   ctx.fillStyle = '#e73146';
@@ -108,7 +83,7 @@ function draw() {
 }
 
 function reset(e) {
-  if (ballIsMoving(X, Y)) return;
+  if (ballIsTraveling()) return;
 
   if (e && e.target.id === 'reset') {
     launchBtn.removeAttribute('disabled');
@@ -117,7 +92,9 @@ function reset(e) {
     angleInput.value = '';
 
     X0 = 30;
-    Y0 = canvas.height - groundHeight;
+    Y0 = canvas.height - (groundHeight + 2);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   } else {
     X0 = X;
   }
@@ -134,7 +111,7 @@ function reset(e) {
 }
 
 function launch() {
-  if (ballIsMoving(X, Y)) return;
+  if (ballIsTraveling()) return;
 
   velocity = Number(velocityInput.value) || 0;
   angle = Number(angleInput.value) || 0;
@@ -145,9 +122,9 @@ function launch() {
 launchBtn.addEventListener('click', launch);
 resetBtn.addEventListener('click', reset);
 
-function ballIsMoving(x, y) {
-  const yIsOnEdge = y >= canvas.height - (groundHeight + 0.1);
-  const xIsOnEdge = x >= canvas.width - radius || X <= radius;
+function ballIsTraveling() {
+  const yIsOnEdge = Y >= canvas.height - (groundHeight + radius);
+  const xIsOnEdge = X >= canvas.width - radius || X <= radius;
 
   return !yIsOnEdge && !xIsOnEdge;
 }
